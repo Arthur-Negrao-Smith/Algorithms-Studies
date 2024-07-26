@@ -3,6 +3,8 @@
 #define array_size 10
 
 
+
+
 typedef struct Hashtable
 {
     int *key;
