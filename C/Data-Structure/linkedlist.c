@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <locale.h>
 
-
+// Estrutura do nó
 typedef struct Node
 {
+    // Cada nó receberá um valor inteiro que busque guardar, um ponteiro do próximo nó e um ponteiro do nó anterior
     int value;
     Node *next;
     Node *previous;
@@ -24,6 +25,7 @@ Node *createNode(int value, Node *next, Node *previous)
     return node;
 }
 
+// Devolverá o endereço de memória ao qual o nó da posição desejada pertence
 Node *searchNodeInPos(Node **list, int pos)
 {
     Node *aux = *list;
@@ -46,9 +48,9 @@ Node *searchNodeInPos(Node **list, int pos)
     return NULL;
 }
 
+// Devolverá o endereço da memória ao qual o último nó pertence
 Node *searchLastNode(Node **list)
 {
-    // Devolverá o endereço da memória ao qual o último nó pertence
     Node *aux = *list;
 
     while (aux)
@@ -108,6 +110,7 @@ void insertEnd(Node **list, int value)
         printf("A alocação do nó falhou");
     }
 }
+
 
 int main()
 {
