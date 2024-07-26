@@ -24,10 +24,46 @@ Node *createNode(int value, Node *next, Node *previous)
     return node;
 }
 
+Node *searchNodeInPos(Node **list, int pos)
+{
+    Node *aux = *list;
+    if (aux)
+    {
+        for (int i=0; i < pos + 1; i++)
+        {   
+            if (aux)
+            {
+                aux = aux->next;
+            }
+            else
+            {
+                printf("Ponteiro inexistente encontrado. Não existe valor para esse índice");
+                return NULL;
+            }
+        }
+        return aux;   
+    }
+    return NULL;
+}
+
+Node *searchLastNode(Node **list)
+{
+    // Devolverá o endereço da memória ao qual o último nó pertence
+    Node *aux = *list;
+
+    while (aux)
+    {
+        aux = aux->next;            
+    }
+    return aux;
+}
+
+// Irá inserir no início da lista ligada
 void insertBeginning(Node **list, int value)
 {
     Node *new_node = malloc(sizeof(Node));
 
+    // Verifica se o ponteiro dado pelo malloc é nulo
     if (new_node)
     {
         new_node->value = value;
@@ -37,14 +73,48 @@ void insertBeginning(Node **list, int value)
     }
     else
     {
-        printf("Alocação do novo nó falhou");
-    }    
+        printf("A alocação do novo nó falhou");
+    }
 
+}
+
+// Irá inserir no final da lista ligada
+void insertEnd(Node **list, int value)
+{
+    Node *new_node = malloc(sizeof(Node));
+
+    // Verifica se o ponteiro dado pelo malloc é nulo
+    if (new_node)
+    {
+        new_node->value;
+        new_node->next = NULL;
+        if (*list == NULL)
+        {
+            // Caso ele seja o primeiro nó a lista irá adicionar ele ao início
+            *list = new_node;
+        }
+        else
+        {
+            // Irá pegar o último item da lista e linkar com o novo nó
+            Node *aux = searchLastNode(*list);
+            aux->next = new_node;
+            // Irá pegar o novo nó e linkar o anterior a ele
+            new_node->previous = aux;
+            
+        }
+    }
+    else
+    {
+        printf("A alocação do nó falhou");
+    }
 }
 
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
+
+    Node *list = createNode(7, NULL, NULL);
+
 
     return 0;
 }
