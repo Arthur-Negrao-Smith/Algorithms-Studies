@@ -67,7 +67,7 @@ int searchLastNodePos(Node **list)
     int i = -1;
     Node *aux = *list;
 
-    while (aux)
+    while (aux->next)
     {
         aux = aux->next;
         i++;            
