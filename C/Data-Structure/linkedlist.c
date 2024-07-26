@@ -39,13 +39,13 @@ Node *searchNodeInPos(Node **list, int pos)
             }
             else
             {
-                printf("Ponteiro inexistente encontrado. Não existe valor para esse índice: %d", i);
+                printf("Ponteiro inexistente encontrado. Não existe valor para esse índice: %d\n", i);
                 return NULL;
             }
         }
         return aux;   
     }
-    printf("Lista inexistente");
+    printf("Lista inexistente\n");
     return NULL;
 }
 
@@ -60,6 +60,24 @@ Node *searchLastNode(Node **list)
     }
     return aux;
 }
+
+// Irá devolver a posição do último nó
+int searchLastNodePos(Node **list)
+{
+    int i = -1;
+    Node *aux = *list;
+
+    while (aux)
+    {
+        aux = aux->next;
+        i++;            
+    }
+    // Se devolver -1 a lista não existe
+    if (i == -1)
+        printf("Sua lista é inexistente\n");
+    return i;
+}
+
 
 // Irá inserir no início da lista ligada
 void insertBeginning(Node **list, int value)
@@ -76,7 +94,7 @@ void insertBeginning(Node **list, int value)
     }
     else
     {
-        printf("A alocação do novo nó falhou");
+        printf("A alocação do novo nó falhou\n");
     }
 
 }
@@ -108,10 +126,55 @@ void insertEnd(Node **list, int value)
     }
     else
     {
-        printf("A alocação do nó falhou");
+        printf("A alocação do nó falhou\n");
     }
 }
 
+// Irá adicionar o novo nó na posição desejada na lista
+void insertMiddle(Node **list, int value, int pos)
+{
+    Node *new_node = malloc(sizeof(Node));
+
+    // Verifica se o ponteiro é NULL
+    if (new_node)
+    {
+        new_node->value = value;
+        // Irá observar se a lista está vazia ou é o primeiro índice
+        if (*list == NULL || pos == 0)
+        {
+            insertBeginning(list, value);
+        }
+        // Caso seja a última posição da lista
+        else if (pos == searchLastNodePos(*list))
+        {
+            insertEnd(*list, value);
+        }
+        // Caso seja uma posição inválida
+        else if (pos > searchLastNodePos || pos < 0)
+        {
+            printf("Valores inválidos. Nenhuma alteração na lista foi feita na lista.\n");
+        }
+        else
+        {
+            // Irá procurar o nó dessa posição e da anterior
+            Node *next_node = searchNodeInPos(list, pos);
+            Node *previous_node = searchNodeInPos(list, pos - 1);
+
+            // Irá ligar os nós antigos ao novo nó
+            new_node->next = next_node;
+            new_node->previous = previous_node;
+
+            // Irá alterar os antigos nós para manter a continuídade da lista
+            previous_node->next = new_node;
+            next_node->previous = new_node;
+
+        }
+    }
+    else
+    {
+        printf("A alocação do novo nó falhou\n");
+    }
+}
 
 int main()
 {
