@@ -139,21 +139,26 @@ void insertMiddle(Node **list, int value, int pos)
     if (new_node)
     {
         new_node->value = value;
+
+        // Irá procurar a última posição da lista
+        int last_node_pos = searchLastNodePos(*list);
+        
         // Irá observar se a lista está vazia ou é o primeiro índice
         if (*list == NULL || pos == 0)
         {
             insertBeginning(list, value);
         }
         // Caso seja a última posição da lista
-        else if (pos == searchLastNodePos(*list))
+        else if (pos == last_node_pos)
         {
             insertEnd(*list, value);
         }
         // Caso seja uma posição inválida
-        else if (pos > searchLastNodePos || pos < 0)
+        else if (pos > last_node_pos || pos < 0)
         {
-            printf("Valores inválidos. Nenhuma alteração na lista foi feita na lista.\n");
+            printf("Valores inválidos. Nenhuma alteração foi feita na lista.\n");
         }
+        // Caso seja uma posição válida no meio
         else
         {
             // Irá procurar o nó dessa posição e da anterior
