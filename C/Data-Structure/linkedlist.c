@@ -12,19 +12,6 @@ typedef struct Node
 
 } Node;
 
-Node *createNode(int value, Node *next, Node *previous)
-{
-    Node *node = (Node*) malloc(sizeof(Node));
-    node->value = value;
-
-    if (previous) // Observa se o ponteiro é NULL, se for o primeiro ele é nulo
-    {
-        node->previous = previous;
-    }
-
-    return node;
-}
-
 // Devolverá o endereço de memória ao qual o nó da posição desejada pertence
 Node *searchNodeInPos(Node **list, int pos)
 {
@@ -181,11 +168,29 @@ void insertMiddle(Node **list, int value, int pos)
     }
 }
 
+// Irá imprimir toda a lista escolhida
+void printList(Node **list)
+{
+    Node *aux = *list;
+    int i = 0;
+    if (aux)
+    {
+        while (aux)
+        {
+            printf("O valor da posição %d: %d\n", i, aux->value);
+            i++;
+        }
+    }
+    else
+    {
+        printf("Sua lista está vazia\n");
+    }
+}
+
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
 
-    Node *list = createNode(7, NULL, NULL);
 
 
     return 0;
