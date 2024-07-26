@@ -29,7 +29,7 @@ Node *createNode(int value, Node *next, Node *previous)
 Node *searchNodeInPos(Node **list, int pos)
 {
     Node *aux = *list;
-    if (aux)
+    if (aux) 
     {
         for (int i=0; i < pos + 1; i++)
         {   
@@ -39,12 +39,13 @@ Node *searchNodeInPos(Node **list, int pos)
             }
             else
             {
-                printf("Ponteiro inexistente encontrado. Não existe valor para esse índice");
+                printf("Ponteiro inexistente encontrado. Não existe valor para esse índice: %d", i);
                 return NULL;
             }
         }
         return aux;   
     }
+    printf("Lista inexistente");
     return NULL;
 }
 
