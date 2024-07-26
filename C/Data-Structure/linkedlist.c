@@ -54,7 +54,7 @@ Node *searchLastNode(Node **list)
 {
     Node *aux = *list;
 
-    while (aux)
+    while (aux->next)
     {
         aux = aux->next;            
     }
