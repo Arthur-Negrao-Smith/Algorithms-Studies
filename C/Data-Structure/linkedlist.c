@@ -228,8 +228,10 @@ int main()
 
         case 4:
             printf("Digite o valor da posição que deseja encontrar: ");
-            scanf("%d\n", &pos);
+            scanf("%d", &pos);
             Node *aux = searchNodeInPos(&list, pos);
+            if (aux)
+                printf("o nó da posição %d tem o valor de: %d\n", pos, aux->value);
             break;
 
         case 5:
