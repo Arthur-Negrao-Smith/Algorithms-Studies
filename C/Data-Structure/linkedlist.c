@@ -13,12 +13,12 @@ typedef struct Node
 } Node;
 
 // Devolverá o endereço de memória ao qual o nó da posição desejada pertence
-Node *searchNodeInPos(Node ***list, int pos)
+Node *searchNodeInPos(Node **list, int pos)
 {
-    Node *aux = **list;
+    Node *aux = *list;
     if (aux) 
     {
-        for (int i=0; i < pos + 1; i++)
+        for (int i=0; i < pos; i++)
         {   
             if (aux)
             {
@@ -37,9 +37,9 @@ Node *searchNodeInPos(Node ***list, int pos)
 }
 
 // Devolverá o endereço da memória ao qual o último nó pertence
-Node *searchLastNode(Node ***list)
+Node *searchLastNode(Node **list)
 {
-    Node *aux = **list;
+    Node *aux = *list;
 
     while (aux->next)
     {
@@ -51,18 +51,21 @@ Node *searchLastNode(Node ***list)
 // Irá devolver a posição do último nó
 int searchLastNodePos(Node **list)
 {
-    int i = -1;
-    Node *aux = *list;
-
-    while (aux->next)
+    if (*list != NULL)
     {
-        aux = aux->next;
-        i++;            
+        int i = -1;
+        Node *aux = *list;
+
+        while (aux->next)
+        {
+            aux = aux->next;
+            i++;            
+        }
+        return i;
     }
     // Se devolver -1 a lista não existe
-    if (i == -1)
-        printf("Sua lista é inexistente\n");
-    return i;
+    printf("Sua lista é inexistente\n");
+    return -1;
 }
 
 // Irá inserir no início da lista ligada
@@ -103,7 +106,7 @@ void insertEnd(Node **list, int value)
         else
         {
             // Irá pegar o último item da lista e linkar com o novo nó
-            Node *aux = searchLastNode(&list);
+            Node *aux = searchLastNode(list);
             aux->next = new_node;
             // Irá pegar o novo nó e linkar o anterior a ele
             new_node->previous = aux;
@@ -127,17 +130,19 @@ void insertMiddle(Node **list, int value, int pos)
         new_node->value = value;
 
         // Irá procurar a última posição da lista
-        int last_node_pos = searchLastNodePos(*list);
-        
+        int last_node_pos = searchLastNodePos(list);
+
         // Irá observar se a lista está vazia ou é o primeiro índice
         if (*list == NULL || pos == 0)
         {
             insertBeginning(list, value);
+            if (last_node_pos == -1)
+                printf("Uma lista foi criada para acomodar o valor desejado\n");
         }
         // Caso seja a última posição da lista
-        else if (pos == last_node_pos)
+        else if (pos - 1 == last_node_pos)
         {
-            insertEnd(*list, value);
+            insertEnd(list, value);
         }
         // Caso seja uma posição inválida
         else if (pos > last_node_pos || pos < 0)
@@ -193,11 +198,10 @@ int main()
     
     int op, value, pos;
     Node *list = NULL;
-
     do
-    {
+    { 
         printf("\nEscolha a opção desejada\n");
-        printf("Opção 0 -> sair\nOpção 1 -> Inserir início\nOpção 2 -> Inserir Final\nOpção 3 -> Inserir Meio\nOpção 4 -> Imprimir\nOpção desejada: ");
+        printf("Opção 0 -> sair\nOpção 1 -> Inserir início\nOpção 2 -> Inserir Final\nOpção 3 -> Inserir Meio\nOpção 4 -> Procurar Nó\nOpção 5 -> Imprimir\nOpção desejada: ");
         scanf("%d", &op);
 
         switch (op)
@@ -223,6 +227,12 @@ int main()
             break;
 
         case 4:
+            printf("Digite o valor da posição que deseja encontrar: ");
+            scanf("%d\n", &pos);
+            Node *aux = searchNodeInPos(&list, pos);
+            break;
+
+        case 5:
             printList(&list);
             break;
 
