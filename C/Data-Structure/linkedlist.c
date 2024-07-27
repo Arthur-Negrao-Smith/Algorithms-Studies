@@ -177,6 +177,7 @@ void printList(Node **list)
         while (aux)
         {
             printf("O valor da posição %d: %d\n", i, aux->value);
+            aux = aux->next;
             i++;
         }
     }
