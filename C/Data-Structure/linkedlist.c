@@ -13,9 +13,9 @@ typedef struct Node
 } Node;
 
 // Devolverá o endereço de memória ao qual o nó da posição desejada pertence
-Node *searchNodeInPos(Node **list, int pos)
+Node *searchNodeInPos(Node ***list, int pos)
 {
-    Node *aux = *list;
+    Node *aux = **list;
     if (aux) 
     {
         for (int i=0; i < pos + 1; i++)
@@ -37,9 +37,9 @@ Node *searchNodeInPos(Node **list, int pos)
 }
 
 // Devolverá o endereço da memória ao qual o último nó pertence
-Node *searchLastNode(Node **list)
+Node *searchLastNode(Node ***list)
 {
-    Node *aux = *list;
+    Node *aux = **list;
 
     while (aux->next)
     {
@@ -93,7 +93,7 @@ void insertEnd(Node **list, int value)
     // Verifica se o ponteiro dado pelo malloc é nulo
     if (new_node)
     {
-        new_node->value;
+        new_node->value = value;
         new_node->next = NULL;
         if (*list == NULL)
         {
@@ -103,7 +103,7 @@ void insertEnd(Node **list, int value)
         else
         {
             // Irá pegar o último item da lista e linkar com o novo nó
-            Node *aux = searchLastNode(*list);
+            Node *aux = searchLastNode(&list);
             aux->next = new_node;
             // Irá pegar o novo nó e linkar o anterior a ele
             new_node->previous = aux;
@@ -228,7 +228,7 @@ int main()
 
         default:
             if (op != 0)
-                printf("Opção inválida. Por favor, escolher uma das opções pré definidas");
+                printf("Opção inválida. Por favor, escolher uma das opções pré definidas\n");
             break;
         }
     } while (op != 0);
