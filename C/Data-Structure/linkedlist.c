@@ -7,8 +7,8 @@ typedef struct Node
 {
     // Cada nó receberá um valor inteiro que busque guardar, um ponteiro do próximo nó e um ponteiro do nó anterior
     int value;
-    Node *next;
-    Node *previous;
+    struct Node *next;
+    struct Node *previous;
 
 } Node;
 
@@ -64,7 +64,6 @@ int searchLastNodePos(Node **list)
         printf("Sua lista é inexistente\n");
     return i;
 }
-
 
 // Irá inserir no início da lista ligada
 void insertBeginning(Node **list, int value)
@@ -190,8 +189,49 @@ void printList(Node **list)
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
+    
+    int op, value, pos;
+    Node *list = NULL;
 
+    do
+    {
+        printf("\nEscolha a opção desejada\n");
+        printf("Opção 0 -> sair\nOpção 1 -> Inserir início\nOpção 2 -> Inserir Final\nOpção 3 -> Inserir Meio\nOpção 4 -> Imprimir\nOpção desejada: ");
+        scanf("%d", &op);
 
+        switch (op)
+        {
+        case 1:
+            printf("Digite o valor que deseja adicionar: ");
+            scanf("%d", &value);
+            insertBeginning(&list, value);
+            break;
+        
+        case 2:
+            printf("Digite o valor que deseja adicionar: ");
+            scanf("%d", &value);
+            insertEnd(&list, value);
+            break;
+        
+        case 3:
+            printf("Digite o valor que deseja adicionar: ");
+            scanf("%d", &value);
+            printf("Digite o valor da posição que deseja adicionar: ");
+            scanf("%d", &pos);
+            insertMiddle(&list, value, pos);
+            break;
+
+        case 4:
+            printList(&list);
+            break;
+
+        default:
+            if (op != 0)
+                printf("Opção inválida. Por favor, escolher uma das opções pré definidas");
+            break;
+        }
+    } while (op != 0);
+    
 
     return 0;
 }
