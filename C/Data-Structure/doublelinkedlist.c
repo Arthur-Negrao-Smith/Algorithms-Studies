@@ -1,3 +1,10 @@
+/*
+Esse código não pertence inteiramente a mim, uma parte bem considerável foi baseada e até copiada para fins de estudo do site: www.geeksforgeeks.org
+Contudo, fiz várias modificações no código adicionando uma interface e explicações, além de adicionar funções e testes ao código
+Esse código pode ser utilizado por qualquer pessoa e espero que ajude nos estudos de estrutura de dados
+Bons estudos e em caso de dúvidas a fonte original talvez sirva melhor para qualquer explicação
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -144,6 +151,26 @@ void printBackaward()
     printf("Sua lista está vazia\n");
 }
 
+void printAtPos(int pos)
+{
+    if (head == NULL)
+    {
+        printf("Sua lista está vazia\n");
+        return;
+    }
+    Node *aux = head;
+    int i = 0;
+    while (aux->next && i != pos)
+    {
+        aux = aux->next;
+        i++;
+    }
+    if (pos == i)
+        printf("O nó da posição %d contém o valor: %d\n", pos, aux->value);
+    else
+        printf("O índice escolhido não está na lista\n");
+}
+
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
@@ -152,7 +179,7 @@ int main()
     do
     {
         printf("\nDigite a opção desejada:\n");
-        printf("0 -> Fechar Programa\n1 -> Adicionar a cabeça da lista\n2 -> Adicionar a calda da lista\n3 -> Remover a cabeça da lista\n4 -> Remover a cauda da lista\n5 -> Mostrar lista\n6 -> Mostrar lista reversa\n");
+        printf("0 -> Fechar Programa\n1 -> Adicionar a cabeça da lista\n2 -> Adicionar a calda da lista\n3 -> Remover a cabeça da lista\n4 -> Remover a cauda da lista\n5 -> Mostrar lista\n6 -> Mostrar lista reversa\n7 -> Mostrar valor da posição escolhida\n");
         printf("Sua opção: ");
         scanf("%d", &op);
         switch (op)
@@ -185,6 +212,12 @@ int main()
             printBackaward();
             break;
 
+        case 7:
+            printf("Digite o valor da posição que deseja ver: ");
+            scanf("%d", &pos);
+            printAtPos(pos);
+            break;
+            
         default:
             if (op != 0)
                 printf("Opção inválida\n");
