@@ -4,5 +4,25 @@
 # Ignore all except files with extensions
 !*.*
 
+# Ignore all executable files
+*.exe
+*.bin
+*.bat
+
 # Unignore all dirs
 !*/
+
+# Ignore python cache dirs || Byte-compiled
+*__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+
+# Ignore all virtual envarioments of python
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
