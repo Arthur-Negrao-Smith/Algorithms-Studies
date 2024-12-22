@@ -4,7 +4,6 @@
 #include <stdbool.h>
 
 #define DEFAULT_STRING_SIZE 8
-#define STRING_MAX_SIZE 100
 
 #define INT 0
 #define FLOAT 1
@@ -42,7 +41,7 @@ Node to add on list
 next: (*hNode) Next node in the list
 previous: (*hNode) Previous node in the list
 type: (unsigned short int) Type of storaged data
-continue_string: (bool) Marker of strings continuity
+continuous: (bool) Marker of a continuous data
 data: (TypedData) Data storaged
 */
 typedef struct hNode
@@ -50,7 +49,7 @@ typedef struct hNode
     struct hNode *next;
     struct hNode *previous;
     short unsigned int type;
-    bool continue_string;
+    bool continuous;
     TypedData data;
 } hNode;
 
@@ -76,9 +75,17 @@ Create a linkedlist with 3 variables
 head: (*hNode) First node of the list
 tail: (*hNode) Last node of the list
 length: (int) Number of itemns in the list
+
+Returns:
+    Will return a linkedlist if the memory allocation was a success, else return NULL
 */
 linkelist *createLinkedlist() {
-    linkelist *list;
+    linkelist *list = (linkelist*) malloc(sizeof(linkelist));
+
+    // If the allocation filed
+    if (!list)
+        return NULL;
+
     list->head = NULL;
     list->tail = NULL;
     list->length = 0;
@@ -92,16 +99,33 @@ Create a node with dynamic memory allocation to add on list
 
 data: (TypedData) Heterogenous data which will be inserted into the node
 type: (int) Type of the data
+
+Returns:
+    Will return a hNode if the memory allocation was a success, else return NULL
 */
 hNode *createNode(TypedData data, int type) {
+
     // Create a memory allocation to the node
     hNode *node;
     node = (hNode*) malloc(sizeof(hNode));
+    
+    // If the allocation filed
+    if (node == NULL) 
+        return NULL;
 
     node->next = NULL;
     node->previous = NULL;
-    node->type = type;
+
+    // If choiced type exist, type will be assigned, else, type will be VOID
+    if (type >= 0 || type <= 6) {
+      node->type = type;
+    } else {
+      node->type = VOID;
+    }
+
     node->data = data;
+
+    return node;
 }
 
 
@@ -182,6 +206,9 @@ Function to search node using idex
 
 list: (*list) List which want find out a node
 index: (int) Index of the of the node in the list
+
+Returns:
+    Return the node pointer if it found, else return NULL pointer
 */
 hNode *search(linkelist *list, int index) {
 
@@ -197,7 +224,7 @@ hNode *search(linkelist *list, int index) {
     }
 
 
-    if (not reverse) {
+    if (!reverse) {
         aux = list->head;
         counter = 0;
 
@@ -265,8 +292,12 @@ Remove a list item with a index
 
 list: (*list) List which will removed a node
 index: (int) Index of the node in the list
+return_node: (bool) Will return removed node of the list if is true, else return a NULL pointer
+
+Returns: 
+    NULL pointer if return_node is false and return the removed node if is true
 */
-void pop(linkelist *list, int index) {
+hNode *pop(linkelist *list, int index, bool return_node) {
 
     hNode *aux1, *aux2;
 
@@ -280,8 +311,6 @@ void pop(linkelist *list, int index) {
 
         aux2->previous = NULL;
 
-        deleteNode(aux1);
-
     // If index is equal the final index or -1
     } else if (index == list->length-1 || index == -1) {
 
@@ -292,7 +321,10 @@ void pop(linkelist *list, int index) {
 
         aux2->next = NULL;
 
-        deleteNode(aux1);
+    // If index is out off the list range
+   } else if (index < 0 || index >= list->length) {
+
+    return NULL;
 
     } else {
 
@@ -306,11 +338,50 @@ void pop(linkelist *list, int index) {
         previous_aux->next = next_aux;
         next_aux->previous = previous_aux;
 
-        deleteNode(aux1);
 
     }
 
+    // Updating length of the list
     list->length--;
+
+    // Will return the node if is return_node is true
+    if (!return_node) {
+
+        deleteNode(aux1);
+        return NULL;
+
+    } else {
+
+        return aux1;
+
+    }
+}
+
+
+/*
+Function to delete all list
+
+list: (*linkedlist) List which will be clean from memory
+ */
+void deleteList(linkelist *list) {
+
+    // Create an auxiliar pointers
+    hNode *aux1 = list->head;
+    hNode *aux2;
+
+    // While aux1 ins"t a NULL pointer"
+    while (aux1) {
+        
+        aux2 = aux1;
+        aux1 = aux1->next;
+
+        free(aux2);
+
+    }
+
+    // Finally, free list from memory
+    free(list);
+
 }
 
 
@@ -337,7 +408,7 @@ void typedPrint(TypedData data, int type) {
         break;
 
     case STRING:
-        printf("%s", data.string);
+        printf("\"%s\"", data.string);
         break;
 
     case BOOL:
@@ -354,14 +425,14 @@ void typedPrint(TypedData data, int type) {
 
 
 /*
-Print all list with select order
+Print all with indexes list with select order
 
 list: (*list) List which will be printed
 reverse: (bool) If true, will print reverse list
 */
-void printList(linkelist *list, bool reverse) {
+void printDebugList(linkelist *list, bool reverse) {
 
-    if (not reverse) {
+    if (!reverse) {
         
         hNode *aux = list->head;
 
@@ -387,4 +458,30 @@ void printList(linkelist *list, bool reverse) {
         aux = aux->previous;
         }
     }
+}
+
+
+/*
+Print all list in order: init->final
+
+list: (*list) List which will be printed
+reverse: (bool) If true, will print reverse list
+*/
+void printList(linkelist *list) {
+
+    printf("[");
+
+    hNode *aux = list->head;
+
+    while (aux)
+    {
+        printf("Node %d -> ");
+        typedPrint(aux->data, aux->type);
+        printf(" ");
+
+        aux = aux->next;
+    }
+
+    printf("]");
+
 }
