@@ -14,7 +14,17 @@
 #define VOID 5
 
 
-// Union to create a heterogenous type
+/*
+Union to create a heterogenous type
+
+type index:
+int = 0
+float = 1
+double = 2
+string = 3
+bool = 4
+void = 5
+*/
 typedef union TypedData
 {
     long long int intNumber;
@@ -26,18 +36,32 @@ typedef union TypedData
 } TypedData;
 
 
-// Node to add on list
+/* 
+Node to add on list
+
+next: (*hNode) Next node in the list
+previous: (*hNode) Previous node in the list
+type: (unsigned short int) Type of storaged data
+continue_string: (bool) Marker of strings continuity
+data: (TypedData) Data storaged
+*/
 typedef struct hNode
 {
     struct hNode *next;
     struct hNode *previous;
-    int type;
+    short unsigned int type;
     bool continue_string;
     TypedData data;
 } hNode;
 
 
-// Linkedlist type to create our list
+/*
+Linkedlist type to create our list
+
+head: (*hNode) Initial node of the list
+tail: (*hNode) Final node of the list
+length: (int) Length of itemns in the list
+*/
 typedef struct linkelist
 {
     struct hNode *head;
@@ -83,6 +107,7 @@ hNode *createNode(TypedData data, int type) {
 
 /* 
 Will delete node from memory
+
 node: (*hNode) Node which will be deleted
 */
 void deleteNode(hNode *node) {
@@ -92,6 +117,7 @@ void deleteNode(hNode *node) {
 
 /*
 Function to add a head on the list
+
 list: (*list) List which the head will be added
 node: (*hNode) Node which will be the new head
 */
@@ -122,6 +148,7 @@ void addHead(linkelist *list, hNode *node) {
 
 /*
 Function to add a tail on the list
+
 list: (*list) List which the tail will be added
 node: (*hNode) Node which will be the new tail
 */
@@ -152,6 +179,7 @@ void addTail(linkelist *list, hNode *node) {
 
 /*
 Function to search node using idex
+
 list: (*list) List which want find out a node
 index: (int) Index of the of the node in the list
 */
@@ -196,6 +224,7 @@ hNode *search(linkelist *list, int index) {
 
 /*
 Function to insert on list with index number
+
 list: (*list) List which will be add a node
 index: (int) New index of the node in the list
 */
@@ -225,12 +254,15 @@ void insert(linkelist *list, hNode *node, int index) {
         next_aux->previous = node;
         node->next = next_aux;
 
+        list->length++;
+
     }
 }
 
 
 /**
 Remove a list item with a index
+
 list: (*list) List which will removed a node
 index: (int) Index of the node in the list
 */
@@ -276,5 +308,83 @@ void pop(linkelist *list, int index) {
 
         deleteNode(aux1);
 
+    }
+
+    list->length--;
+}
+
+
+/*
+Print TypedData with especific printf marker
+
+data: (TypedData) Data which will be printed
+type: (int) Type of the data
+*/
+void typedPrint(TypedData data, int type) {
+
+    switch (type)
+    {
+    case INT:
+        printf("%d", data.intNumber);
+        break;
+    
+    case FLOAT:
+        printf("%f", data.floatNumber);
+        break;
+
+    case DOUBLE:
+        printf("%f", data.doubleNumber);
+        break;
+
+    case STRING:
+        printf("%s", data.string);
+        break;
+
+    case BOOL:
+        printf("%d", data.boolean ? "true" : "false");
+
+    case VOID:
+        printf("NULL");
+
+    default:
+        printf("Type undefined");
+        break;
+    }
+}
+
+
+/*
+Print all list with select order
+
+list: (*list) List which will be printed
+reverse: (bool) If true, will print reverse list
+*/
+void printList(linkelist *list, bool reverse) {
+
+    if (not reverse) {
+        
+        hNode *aux = list->head;
+
+        while (aux)
+        {
+            printf("Node %d -> ");
+            typedPrint(aux->data, aux->type);
+            printf("\n");
+
+            aux = aux->next;
+        }
+
+    } else {
+        
+        hNode *aux = list->tail;
+
+        while (aux) 
+        {
+        printf("Node %d -> ");
+        typedPrint(aux->data, aux->type);
+        printf("\n");
+
+        aux = aux->previous;
+        }
     }
 }
