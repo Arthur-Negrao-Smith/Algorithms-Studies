@@ -5,7 +5,7 @@
 !*.*
 
 # Ignore vscode extensions
-.vscode/
+.vscode/*
 
 # Ignore all executable files
 *.exe
