@@ -49,9 +49,9 @@ typedef struct linkelist
 /* 
 Create a linkedlist with 3 variables
 
-head: First node of the list
-tail: Last node of the list
-length: Number of itemns in the list
+head: (*hNode) First node of the list
+tail: (*hNode) Last node of the list
+length: (int) Number of itemns in the list
 */
 linkelist *createLinkedlist() {
     linkelist *list;
@@ -63,7 +63,12 @@ linkelist *createLinkedlist() {
 }
 
 
-// Create a node with dynamic memory allocation to add on list
+/*
+Create a node with dynamic memory allocation to add on list
+
+data: (TypedData) Heterogenous data which will be inserted into the node
+type: (int) Type of the data
+*/
 hNode *createNode(TypedData data, int type) {
     // Create a memory allocation to the node
     hNode *node;
@@ -76,13 +81,20 @@ hNode *createNode(TypedData data, int type) {
 }
 
 
-// Will delete node from memory
+/* 
+Will delete node from memory
+node: (*hNode) Node which will be deleted
+*/
 void deleteNode(hNode *node) {
     free(node);
 }
 
 
-// Function to add a head on the list
+/*
+Function to add a head on the list
+list: (*list) List which the head will be added
+node: (*hNode) Node which will be the new head
+*/
 void addHead(linkelist *list, hNode *node) {
     
     // If don't have any item in the list
@@ -107,7 +119,12 @@ void addHead(linkelist *list, hNode *node) {
     }
 }
 
-// Function to add a tail on the list
+
+/*
+Function to add a tail on the list
+list: (*list) List which the tail will be added
+node: (*hNode) Node which will be the new tail
+*/
 void addTail(linkelist *list, hNode *node) {
 
     // If don't have any item in the list
@@ -132,3 +149,132 @@ void addTail(linkelist *list, hNode *node) {
     }
 }
 
+
+/*
+Function to search node using idex
+list: (*list) List which want find out a node
+index: (int) Index of the of the node in the list
+*/
+hNode *search(linkelist *list, int index) {
+
+    hNode *aux;
+    int counter;
+    bool reverse;
+
+    // Otimization to reduce the loop
+    if (index <= (int) list->length / 2) {
+        reverse = false;
+    } else {
+        reverse = true;
+    }
+
+
+    if (not reverse) {
+        aux = list->head;
+        counter = 0;
+
+        while (counter < index) {
+            aux = aux->next;
+            counter++;
+        }
+
+        return aux;
+
+    } else {
+        aux = list->tail;
+        counter = list->length-1;
+
+        while (counter > index) {
+            aux = aux->next;
+            counter++;
+        }
+
+        return aux;
+    }
+}
+
+
+/*
+Function to insert on list with index number
+list: (*list) List which will be add a node
+index: (int) New index of the node in the list
+*/
+void insert(linkelist *list, hNode *node, int index) {
+
+    // If index is equal 0 is a inital item
+    if (index == 0) {
+
+        addHead(list, node);
+
+    // If index is equal final index of the list
+    } else if (index >= list->length-1) {
+        
+        addTail(list, node);
+
+    } else {
+
+        // Auxiliar nodes to swap the pointers
+        hNode *previous_aux, *next_aux;
+
+        previous_aux = search(list, index-1);
+        next_aux = previous_aux->next;
+
+        previous_aux->next = node;
+        node->previous = previous_aux;
+
+        next_aux->previous = node;
+        node->next = next_aux;
+
+    }
+}
+
+
+/**
+Remove a list item with a index
+list: (*list) List which will removed a node
+index: (int) Index of the node in the list
+*/
+void pop(linkelist *list, int index) {
+
+    hNode *aux1, *aux2;
+
+    // If index equals to 0, so delete the head of list
+    if (index == 0) {
+
+        aux1 = list->head;
+
+        list->head = aux1->next;
+        aux2 = aux1->next;
+
+        aux2->previous = NULL;
+
+        deleteNode(aux1);
+
+    // If index is equal the final index or -1
+    } else if (index == list->length-1 || index == -1) {
+
+        aux1 = list->tail;
+
+        list->tail = aux1->previous;
+        aux2 = aux1->previous;
+
+        aux2->next = NULL;
+
+        deleteNode(aux1);
+
+    } else {
+
+        hNode *previous_aux, *next_aux;
+        
+        aux1 = search(list, index);
+
+        previous_aux = aux1->previous;
+        next_aux = aux1->next;
+
+        previous_aux->next = next_aux;
+        next_aux->previous = previous_aux;
+
+        deleteNode(aux1);
+
+    }
+}
