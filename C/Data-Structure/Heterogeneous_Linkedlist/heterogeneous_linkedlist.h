@@ -214,7 +214,7 @@ hNode *search(linkelist *list, int index) {
 
         while (counter > index) {
             aux = aux->next;
-            counter++;
+            counter--;
         }
 
         return aux;
