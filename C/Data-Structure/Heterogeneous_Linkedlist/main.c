@@ -4,9 +4,9 @@
 #include <locale.h>
 
 
-char *input(char*, int);
+char *input(char*, char*);
 char printMenu(void);
-
+void typesMenu(linkedlist*);
 
 int main() {
 
@@ -14,11 +14,15 @@ int main() {
 
     linkedlist *list = createLinkedlist();
 
-    char resp = '0';
 
-    while (resp != '6') {
+    char resp[1];
+    resp[0] = '0';
 
-        switch (resp) {
+    while (resp[0] != '6') {
+
+        resp[0] = printMenu();
+
+        switch (resp[0]) {
         case '1': 
             typesMenu(list);
             break;
@@ -30,6 +34,7 @@ int main() {
             break;
 
         case '4':
+            printList(list);
             break;
 
         case '5':
@@ -46,10 +51,11 @@ int main() {
 }
 
 
-char *input(char *text, int max_length) {
-    char *resp = fgets(text, max_length, stdin);
+char *input(char *string, char *text) {
+    printf("%s", text);
+    fgets(string, sizeof(string), stdin);
     fflush(stdin);
-    return resp;
+    return string;
 }
 
 
@@ -61,26 +67,24 @@ char printMenu(void) {
     puts("4. Printar lista");
     puts("5. Apagar lista");
     puts("6. sair");
-    char resp[1] = input("Qual opção você deseja? ", 1);
+    char resp[1];
+    input(resp, "Qual opção você deseja? ");
 
     return resp[0];
 }
 
 
 void typesMenu(linkedlist *list) {
-    int pos;
-    printf("Qual a posição que deseja adicionar? ");
-    scanf("%d", pos);
-    fflush(stdin);
 
-    pust("Tipos de dados:");
+    puts("Tipos de dados:");
     puts("1. int");
     puts("2. float");
     puts("3. double");
     puts("4. string");
     puts("5. bool [0 ou 1]");
     puts("6. void");
-    char resp[1] = input("Qual o tipo de dado que deseja adicionar? ", 1);
+    char resp[1];
+    input(resp, "Qual o tipo de dado que deseja adicionar? ");
     printf("Digite o valor do dado selecionado: ");
 
     TypedData data;
@@ -89,7 +93,7 @@ void typesMenu(linkedlist *list) {
     switch (resp[0])
     {
     case '1': 
-        scanf("%d", data.intNumber);
+        scanf("%lld", data.intNumber);
         fflush(stdin);
         type = INT;
         break;
@@ -101,19 +105,19 @@ void typesMenu(linkedlist *list) {
         break;
     
     case '3':
-        scanf("%f", data.doubleNumber);
+        scanf("%lf", data.doubleNumber);
         fflush(stdin);
         type = DOUBLE;
         break;
 
     case '4':
-        scanf("%s", data.string);
+        fgets(data.string, sizeof(data.string), stdin);
         fflush(stdin);
         type = STRING;
         break;
 
     case '5':
-        scanf("%i", data.boolean);
+        scanf("%d", data.boolean);
         fflush(stdin);
         type = BOOL;
         break;
@@ -124,6 +128,11 @@ void typesMenu(linkedlist *list) {
 
     default: puts("Valor inválido."); return;
     }
+
+    int pos = 0;
+    printf("Qual a posição que deseja adicionar? ");
+    scanf("%d", &pos);
+    fflush(stdin);
 
     hNode *node = createNode(data, type);
     insert(list, node, pos);
