@@ -333,7 +333,7 @@ void typedPrint(TypedData data, int type) {
     switch (type)
     {
     case INT:
-        printf("%d", data.intNumber);
+        printf("%lld", data.intNumber);
         break;
     
     case FLOAT:
@@ -341,7 +341,7 @@ void typedPrint(TypedData data, int type) {
         break;
 
     case DOUBLE:
-        printf("%f", data.doubleNumber);
+        printf("%lf", data.doubleNumber);
         break;
 
     case STRING:
@@ -349,7 +349,7 @@ void typedPrint(TypedData data, int type) {
         break;
 
     case BOOL:
-        printf("%d", data.boolean ? "true" : "false");
+        printf("%s", data.boolean ? "true" : "false");
 
     case VOID:
         printf("NULL");
@@ -369,30 +369,36 @@ reverse: (bool) If true, will print reverse list
 */
 void printDebugList(linkedlist *list, bool reverse) {
 
+    int counter;
+
     if (!reverse) {
         
         hNode *aux = list->head;
+        counter = 0;
 
         while (aux)
         {
-            printf("Node %d -> ");
+            printf("Node %d -> ", counter);
             typedPrint(aux->data, aux->type);
             printf("\n");
 
             aux = aux->next;
+            counter++;
         }
 
     } else {
         
         hNode *aux = list->tail;
+        counter = -1;
 
         while (aux) 
         {
-        printf("Node %d -> ");
+        printf("Node %d -> ", counter);
         typedPrint(aux->data, aux->type);
         printf("\n");
 
         aux = aux->previous;
+        counter--;
         }
     }
 }
@@ -412,7 +418,7 @@ void printList(linkedlist *list) {
 
     while (aux)
     {
-        printf("Node %d -> ");
+
         typedPrint(aux->data, aux->type);
         printf(" ");
 
