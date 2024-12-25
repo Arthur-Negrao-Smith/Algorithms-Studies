@@ -1,72 +1,9 @@
+#include "heterogeneous_linkedlist.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-
-#define DEFAULT_STRING_SIZE 8
-
-#define INT 0
-#define FLOAT 1
-#define DOUBLE 2
-#define STRING 3
-#define BOOL 4
-#define VOID 5
-
-
-/*
-Union to create a heterogenous type
-
-type index:
-int = 0
-float = 1
-double = 2
-string = 3
-bool = 4
-void = 5
-*/
-typedef union TypedData
-{
-    long long int intNumber;
-    float floatNumber;
-    double doubleNumber;
-    char *string;
-    bool boolean;
-    void *v;
-} TypedData;
-
-
-/* 
-Node to add on list
-
-next: (*hNode) Next node in the list
-previous: (*hNode) Previous node in the list
-type: (unsigned short int) Type of storaged data
-continuous: (bool) Marker of a continuous data
-data: (TypedData) Data storaged
-*/
-typedef struct hNode
-{
-    struct hNode *next;
-    struct hNode *previous;
-    short unsigned int type;
-    bool continuous;
-    TypedData data;
-} hNode;
-
-
-/*
-Linkedlist type to create our list
-
-head: (*hNode) Initial node of the list
-tail: (*hNode) Final node of the list
-length: (int) Length of itemns in the list
-*/
-typedef struct linkelist
-{
-    struct hNode *head;
-    struct hNode *tail;
-    int length;
-} linkelist;
 
 
 /* 
@@ -79,8 +16,8 @@ length: (int) Number of itemns in the list
 Returns:
     Will return a linkedlist if the memory allocation was a success, else return NULL
 */
-linkelist *createLinkedlist() {
-    linkelist *list = (linkelist*) malloc(sizeof(linkelist));
+linkedlist *createLinkedlist() {
+    linkedlist *list = (linkedlist*) malloc(sizeof(linkedlist));
 
     // If the allocation filed
     if (!list)
@@ -145,7 +82,7 @@ Function to add a head on the list
 list: (*list) List which the head will be added
 node: (*hNode) Node which will be the new head
 */
-void addHead(linkelist *list, hNode *node) {
+void addHead(linkedlist *list, hNode *node) {
     
     // If don't have any item in the list
     if (list->head == NULL) {
@@ -176,7 +113,7 @@ Function to add a tail on the list
 list: (*list) List which the tail will be added
 node: (*hNode) Node which will be the new tail
 */
-void addTail(linkelist *list, hNode *node) {
+void addTail(linkedlist *list, hNode *node) {
 
     // If don't have any item in the list
     if (list->tail) {
@@ -210,7 +147,7 @@ index: (int) Index of the of the node in the list
 Returns:
     Return the node pointer if it found, else return NULL pointer
 */
-hNode *search(linkelist *list, int index) {
+hNode *search(linkedlist *list, int index) {
 
     hNode *aux;
     int counter;
@@ -255,7 +192,7 @@ Function to insert on list with index number
 list: (*list) List which will be add a node
 index: (int) New index of the node in the list
 */
-void insert(linkelist *list, hNode *node, int index) {
+void insert(linkedlist *list, hNode *node, int index) {
 
     // If index is equal 0 is a inital item
     if (index == 0) {
@@ -297,7 +234,7 @@ return_node: (bool) Will return removed node of the list if is true, else return
 Returns: 
     NULL pointer if return_node is false and return the removed node if is true
 */
-hNode *pop(linkelist *list, int index, bool return_node) {
+hNode *pop(linkedlist *list, int index, bool return_node) {
 
     hNode *aux1, *aux2;
 
@@ -363,7 +300,7 @@ Function to delete all list
 
 list: (*linkedlist) List which will be clean from memory
  */
-void deleteList(linkelist *list) {
+void deleteList(linkedlist *list) {
 
     // Create an auxiliar pointers
     hNode *aux1 = list->head;
@@ -430,7 +367,7 @@ Print all with indexes list with select order
 list: (*list) List which will be printed
 reverse: (bool) If true, will print reverse list
 */
-void printDebugList(linkelist *list, bool reverse) {
+void printDebugList(linkedlist *list, bool reverse) {
 
     if (!reverse) {
         
@@ -467,7 +404,7 @@ Print all list in order: init->final
 list: (*list) List which will be printed
 reverse: (bool) If true, will print reverse list
 */
-void printList(linkelist *list) {
+void printList(linkedlist *list) {
 
     printf("[");
 
