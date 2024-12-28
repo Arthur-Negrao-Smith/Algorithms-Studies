@@ -31,12 +31,27 @@ int main() {
             break;
 
         case 2:
-            int *index = (int*) malloc(sizeof(int*));
-            input(index, "Digite o índice do nó que deseja apagar: ");
-            pop(list, *index, false);
+            int *pop_index = (int*) malloc(sizeof(int*));
+            input(pop_index, "Digite o índice do nó que deseja apagar: ");
+            pop(list, *pop_index, false);
+            free(pop_index);
             break;
         
         case 3:
+            int *search_index = (int*) malloc(sizeof(int*));
+            input(search_index, "Digite o índice do nó que deseja procurar: ");
+            hNode *node = search(list, *search_index);
+
+            // If don't find the node
+            if (node == NULL) {
+                printf("Nenhum nó encontrado com esse índice\n");
+                free(search_index);
+                break;
+            }
+
+            printf("Nó %d -> ", *search_index);
+            typedPrint(node->data, node->type);
+            free(search_index);
             break;
 
         case 4:
