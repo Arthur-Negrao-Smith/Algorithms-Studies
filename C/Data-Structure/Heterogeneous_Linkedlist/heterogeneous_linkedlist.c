@@ -116,7 +116,7 @@ node: (*hNode) Node which will be the new tail
 void addTail(linkedlist *list, hNode *node) {
 
     // If don't have any item in the list
-    if (list->tail) {
+    if (list->tail == NULL) {
 
         list->head = node;
         list->tail = node;
@@ -239,15 +239,21 @@ hNode *pop(linkedlist *list, int index, bool return_node) {
 
     hNode *aux1, *aux2;
 
+    if (list->head == NULL) {
+        return NULL;
+
     // If index equals to 0, so delete the head of list
-    if (index == 0) {
+    } else if (index == 0) {
 
         aux1 = list->head;
 
         list->head = aux1->next;
-        aux2 = aux1->next;
 
-        aux2->previous = NULL;
+        // If the list has more than one item
+        if (aux1->next) {
+            aux2 = aux1->next;
+            aux2->previous = NULL;
+        }
 
     // If index is equal the final index or -1
     } else if (index == list->length-1 || index == -1) {
@@ -255,9 +261,12 @@ hNode *pop(linkedlist *list, int index, bool return_node) {
         aux1 = list->tail;
 
         list->tail = aux1->previous;
-        aux2 = aux1->previous;
 
-        aux2->next = NULL;
+        // If the list has more than one item
+        if (aux1->previous) {
+            aux2 = aux1->previous;
+            aux2->next = NULL;
+        }
 
     // If index is out off the list range
    } else if (index < 0 || index >= list->length) {
@@ -351,9 +360,11 @@ void typedPrint(TypedData data, int type) {
 
     case BOOL:
         printf("%s", data.boolean ? "true" : "false");
+        break;
 
     case VOID:
         printf("NULL");
+        break;
 
     default:
         printf("Type undefined");
@@ -413,7 +424,7 @@ reverse: (bool) If true, will print reverse list
 */
 void printList(linkedlist *list) {
 
-    printf("[");
+    printf("[ ");
 
     hNode *aux = list->head;
 
@@ -421,7 +432,10 @@ void printList(linkedlist *list) {
     {
 
         typedPrint(aux->data, aux->type);
-        printf(" ");
+        if (aux->next)
+            printf(", ");
+        else 
+            printf(" ");
 
         aux = aux->next;
     }
