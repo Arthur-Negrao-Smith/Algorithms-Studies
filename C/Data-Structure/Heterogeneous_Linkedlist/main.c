@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <locale.h>
 
-
-char *input(char*, char*);
-char printMenu(void);
+void clear(void);
+void input(int*, char*);
+void printMenu(int*);
 void typesMenu(linkedlist*);
 
 int main() {
@@ -14,33 +14,32 @@ int main() {
 
     linkedlist *list = createLinkedlist();
 
+    int *user = (int*) malloc(sizeof(int*));
+    *user = 0;
 
-    char resp[1];
-    resp[0] = '0';
 
-    while (resp[0] != '6') {
+    while (*user != 6) {
+        printMenu(user);
 
-        resp[0] = printMenu();
-
-        switch (resp[0]) {
-        case '1': 
+        switch (*user) {
+        case 1: 
             typesMenu(list);
             break;
 
-        case '2':
+        case 2:
             break;
         
-        case '3':
+        case 3:
             break;
 
-        case '4':
+        case 4:
             printList(list);
             break;
 
-        case '5':
+        case 5:
             break;
 
-        case '6':
+        case 6:
             break;
 
         default: puts("Valor inválido."); break;
@@ -50,16 +49,31 @@ int main() {
     return 0;
 }
 
+// Function to clear the terminal
+void clear(void) {
+    printf("\e[1;1H\e[2J");
+}
 
-char *input(char *string, char *text) {
+/*
+Collect input from the user keyboard
+
+user: (int*) Pointer to user input
+text: (char*)  String with text to print on screen
+*/
+void input(int *user, char *text) {
     printf("%s", text);
-    fgets(string, sizeof(string), stdin);
+    scanf("%d", user);
     fflush(stdin);
-    return string;
 }
 
 
-char printMenu(void) {
+/*
+Print the main menu
+
+user: (int*) Pointer to user input
+*/
+void printMenu(int *user) {
+    clear();
     puts("Menu de opções da lista heterogênea");
     puts("1. Adicionar um valor");
     puts("2. Remover um valor");
@@ -67,68 +81,75 @@ char printMenu(void) {
     puts("4. Printar lista");
     puts("5. Apagar lista");
     puts("6. sair");
-    char resp[1];
-    input(resp, "Qual opção você deseja? ");
-
-    return resp[0];
+    input(user, "Qual opção você deseja? ");
 }
 
 
+/*
+Menu with types options
+
+list: (linkedlist*) List with all data storage
+*/
 void typesMenu(linkedlist *list) {
 
+    clear();
     puts("Tipos de dados:");
-    puts("1. int");
-    puts("2. float");
-    puts("3. double");
-    puts("4. string");
-    puts("5. bool [0 ou 1]");
-    puts("6. void");
-    char resp[1];
-    input(resp, "Qual o tipo de dado que deseja adicionar? ");
+    puts("0. int");
+    puts("1. float");
+    puts("2. double");
+    puts("3. string");
+    puts("4. bool [0 ou 1]");
+    puts("5. void");
+    int *data_type = (int*) malloc(sizeof(int*));
+    input(data_type, "Qual o tipo de dado que deseja adicionar? ");
     printf("Digite o valor do dado selecionado: ");
 
     TypedData data;
     short unsigned int type;
 
-    switch (resp[0])
+    switch (*data_type)
     {
-    case '1': 
-        scanf("%lld", data.intNumber);
+    case INT: 
+        scanf("%lld", &data.intNumber);
         fflush(stdin);
         type = INT;
         break;
 
-    case '2':
-        scanf("%f", data.floatNumber);
+    case FLOAT:
+        scanf("%f", &data.floatNumber);
         fflush(stdin);
         type = FLOAT;
         break;
     
-    case '3':
-        scanf("%lf", data.doubleNumber);
+    case DOUBLE:
+        scanf("%lf", &data.doubleNumber);
         fflush(stdin);
         type = DOUBLE;
         break;
 
-    case '4':
+    case STRING:
         fgets(data.string, sizeof(data.string), stdin);
         fflush(stdin);
         type = STRING;
         break;
 
-    case '5':
-        scanf("%d", data.boolean);
+    case BOOL:
+        scanf("%d", &data.boolean);
         fflush(stdin);
         type = BOOL;
         break;
 
-    case '6':
+    case VOID:
         data.v = NULL;
         break;
 
-    default: puts("Valor inválido."); return;
+    default: 
+        puts("Valor inválido."); 
+        free(data_type);
+        return;
     }
 
+    free(data_type);
     int pos = 0;
     printf("Qual a posição que deseja adicionar? ");
     scanf("%d", &pos);
