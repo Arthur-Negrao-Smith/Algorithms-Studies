@@ -27,7 +27,7 @@
         long long int intNumber;
         float floatNumber;
         double doubleNumber;
-        char *string;
+        char string[DEFAULT_STRING_SIZE];
         bool boolean;
         void *v;
     } TypedData;
@@ -46,7 +46,6 @@
         struct hNode *next;
         struct hNode *previous;
         short unsigned int type;
-        bool continuous;
         TypedData data;
     } hNode;
 
