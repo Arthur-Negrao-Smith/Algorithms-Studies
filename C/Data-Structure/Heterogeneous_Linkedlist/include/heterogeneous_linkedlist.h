@@ -73,6 +73,7 @@
     void insert(linkedlist *list, hNode *node, int index);
     hNode *pop(linkedlist *list, int index, bool return_node);
     void deleteList(linkedlist *list);
+    void typedPrint(TypedData data, int type);
     void printDebugList(linkedlist *list, bool reverse);
     void printList(linkedlist *list);
 
