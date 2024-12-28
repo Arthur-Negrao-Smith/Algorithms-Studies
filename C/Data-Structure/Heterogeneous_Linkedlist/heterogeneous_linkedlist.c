@@ -160,8 +160,12 @@ hNode *search(linkedlist *list, int index) {
         reverse = true;
     }
 
+    // If don't have any item in the list or list have only a item and index ins't 0
+    if (list->head == NULL || (index != 0 && list->length == 1)){
+        return NULL;
 
-    if (!reverse) {
+
+    } else if (!reverse) {
         aux = list->head;
         counter = 0;
 
