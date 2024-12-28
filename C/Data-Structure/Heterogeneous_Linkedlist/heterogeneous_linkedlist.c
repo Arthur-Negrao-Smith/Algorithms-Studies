@@ -54,7 +54,7 @@ hNode *createNode(TypedData data, int type) {
     node->previous = NULL;
 
     // If choiced type exist, type will be assigned, else, type will be VOID
-    if (type >= 0 || type <= 6) {
+    if (type >= 0 && type <= 6) {
       node->type = type;
     } else {
       node->type = VOID;
@@ -190,6 +190,7 @@ hNode *search(linkedlist *list, int index) {
 Function to insert on list with index number
 
 list: (*list) List which will be add a node
+node: (*hNode) Node with data storage
 index: (int) New index of the node in the list
 */
 void insert(linkedlist *list, hNode *node, int index) {
@@ -425,6 +426,6 @@ void printList(linkedlist *list) {
         aux = aux->next;
     }
 
-    printf("]");
+    printf("]\n");
 
 }
