@@ -1,4 +1,4 @@
-#include "include/heterogeneous_linkedlist.h"
+#include "heterogeneous_linkedlist.h"
 
 #include <stdio.h>
 #include <locale.h>

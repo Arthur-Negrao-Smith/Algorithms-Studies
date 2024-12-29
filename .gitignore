@@ -4,6 +4,9 @@
 # Ignore all except files with extensions
 !*.*
 
+# Don't ignore Makefiles
+!Makefile
+
 # Ignore vscode extensions
 .vscode/*
 
